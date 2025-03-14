@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, TouchableOpacity, FlatList, Button } from 'react-native';
 import LocationStartStyles from './styles/LocationStartStyles';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
@@ -46,9 +46,9 @@ const LocationStart = () => {
             <Text style={LocationStartStyles.cardTitle}>{item.cityName}</Text>
             <Text style={LocationStartStyles.cardText}>{item.description}</Text>
             {renderStars(item.rating)}
-            <Button
+            <Button style={LocationStartStyles.mapButton}
               title="View on Map"
-              onPress={() => navigation.navigate("MapScreen", { coordinates: item.coordinates })}
+              onPress={() => navigation.navigate(Map)}
             />
           </View>
         )}

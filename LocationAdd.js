@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, } from 'react-native';
 import LocationAddStyles from './styles/LocationAddStyles';
 import { AntDesign } from '@expo/vector-icons';
 import Geocoder from "react-native-geocoding";
@@ -19,23 +19,11 @@ const LocationAdd = ({route, navigation }) => {
         alert('Please provide both city name and description.');
         return;  
       }
-    
-      try {
-        const geoResponse = await Geocoder.from(cityName);
-        console.log("Geocoding response:", geoResponse);  
-    
-        if (geoResponse.status === 'OK') {
-          const location = geoResponse.results[0].geometry.location;
-    
           const newCard = {
             id: Math.random().toString(),
             cityName,
             description,
             rating,
-            coordinates: {
-              latitude: location.lat,
-              longitude: location.lng,
-            },
           };
     
           handleAddLocation(newCard); // Add the card to the list
@@ -43,13 +31,6 @@ const LocationAdd = ({route, navigation }) => {
           setCityName("");
           setDescription("");
           setRating(0);
-        } else {
-          alert("City not found. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error with geocoding:", error);
-        alert("Error while fetching the city. Please try again.");
-      }
     };
 
     return (

@@ -21,6 +21,11 @@ const LocationStartStyles = StyleSheet.create({
         paddingBottom: 20,
       },
 
+      mapButton: {
+        fontSize: 16,
+        color: 'rgba(80, 79, 79, 0.38)',
+      },
+
     buttonTxt: {
         color: '#FFFFFF',
         textAlign: 'center',
