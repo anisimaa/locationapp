@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import { db } from './firebase'; 
-import { addDoc, collection } from 'firebase/firestore';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import LocationAddStyles from './styles/LocationAddStyles';
 import { AntDesign } from '@expo/vector-icons';
+import Geocoder from "react-native-geocoding";
+import { GOOGLE_MAPS_API_KEY } from "@env";
+
+Geocoder.init(GOOGLE_MAPS_API_KEY);
 
 const LocationAdd = ({route, navigation }) => {
     const { handleAddLocation } = route.params;
@@ -13,24 +15,42 @@ const LocationAdd = ({route, navigation }) => {
 
     //adding location cards
     const handleAddCard = async () => {
-        if (cityName && description) {
+      if (!cityName || !description) {
+        alert('Please provide both city name and description.');
+        return;  
+      }
+    
+      try {
+        const geoResponse = await Geocoder.from(cityName);
+        console.log("Geocoding response:", geoResponse);  
+    
+        if (geoResponse.status === 'OK') {
+          const location = geoResponse.results[0].geometry.location;
+    
           const newCard = {
             id: Math.random().toString(),
             cityName,
             description,
             rating,
+            coordinates: {
+              latitude: location.lat,
+              longitude: location.lng,
+            },
           };
-          try {
-            // Save the new card to Firestore
-            await addDoc(collection(db, 'locations'), newCard);
-
-            handleAddLocation(newCard);
-            navigation.goBack(); // Navigate back to the start screen
-          } catch (error) {
-            console.error('Error adding document: ', error);
-          }
+    
+          handleAddLocation(newCard); // Add the card to the list
+          navigation.goBack(); // Navigate back to LocationStart
+          setCityName("");
+          setDescription("");
+          setRating(0);
+        } else {
+          alert("City not found. Please try again.");
         }
-      };
+      } catch (error) {
+        console.error("Error with geocoding:", error);
+        alert("Error while fetching the city. Please try again.");
+      }
+    };
 
     return (
         <View style={LocationAddStyles.formContainer}>

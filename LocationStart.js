@@ -46,6 +46,10 @@ const LocationStart = () => {
             <Text style={LocationStartStyles.cardTitle}>{item.cityName}</Text>
             <Text style={LocationStartStyles.cardText}>{item.description}</Text>
             {renderStars(item.rating)}
+            <Button
+              title="View on Map"
+              onPress={() => navigation.navigate("MapScreen", { coordinates: item.coordinates })}
+            />
           </View>
         )}
       />
